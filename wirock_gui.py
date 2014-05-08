@@ -11,7 +11,7 @@ class MainDialog(QDialog, wirock.Ui_dialog):
     def __init__(self, parent=None):
         super(MainDialog, self).__init__(parent)
         self.setupUi(self)
-        self.tb = top_block()
+        self.tb = top_block(dev_addr='addr=192.168.10.5')
 
         self.connect(self.onButton, SIGNAL("clicked()"), self.turn_on)
         self.connect(self.offButton, SIGNAL("clicked()"), self.turn_off)
@@ -26,12 +26,12 @@ class MainDialog(QDialog, wirock.Ui_dialog):
         print "Turn off!"
         self.refresh_tb()
         self.tb.set_func("off")
-        self.tb.unlock()
+        self.tb.run()
 
     def refresh_tb(self):
         self.tb.set_dip_conf(self.evaluate_dip())
         self.tb.set_gain(int(self.gainSlider.value()))
-        self.tb.set_device(self.devtypeBox.currentText(), self.devaddrEdit.text())
+        self.tb.set_device(self.devtypeBox.currentText(), str(self.devaddrEdit.text()))
         self.tb.set_socket(str(self.comboBox.itemText(self.comboBox.currentIndex())))
 
     def evaluate_dip(self):

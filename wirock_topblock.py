@@ -1,5 +1,7 @@
 from gnuradio import gr
 from gnuradio import uhd
+from gnuradio import blocks
+from gnuradio import filter as gr_filter
 from gnuradio.eng_option import eng_option
 
 
@@ -29,10 +31,10 @@ class top_block(gr.top_block):
 
         self.build_signal()
 
-        self.gr_vector_source_x_0 = gr.vector_source_c(self.signal, False, 1)
+        self.gr_vector_source_x_0 = blocks.vector_source_c(self.signal, False, 1)
 
-        self.gr_repeat_0 = gr.repeat(gr.sizeof_gr_complex * 1, 125)
-        self.gr_freq_xlating_fir_filter_xxx_0 = gr.freq_xlating_fir_filter_ccf(1, (1, ), -180e3, samp_rate)
+        self.gr_repeat_0 = blocks.repeat(gr.sizeof_gr_complex * 1, 125)
+        self.gr_freq_xlating_fir_filter_xxx_0 = gr_filter.freq_xlating_fir_filter_ccf(1, (1, ), -180e3, samp_rate)
 
         ##################################################
         # Connections
@@ -88,7 +90,7 @@ class top_block(gr.top_block):
         self.dip_conf = dip_conf
         self.build_signal()
         self.gr_vector_source_x_0 = None
-        self.gr_vector_source_x_0 = gr.vector_source_c(self.signal, False, 1)
+        self.gr_vector_source_x_0 = blocks.vector_source_c(self.signal, False, 1)
         self.after_reconfiguration()
 
     def set_func(self, func):
@@ -96,7 +98,7 @@ class top_block(gr.top_block):
         self.func = func
         self.build_signal()
         self.gr_vector_source_x_0 = None
-        self.gr_vector_source_x_0 = gr.vector_source_c(self.signal, False, 1)
+        self.gr_vector_source_x_0 = blocks.vector_source_c(self.signal, False, 1)
         self.after_reconfiguration()
 
     def set_socket(self, socket):
@@ -104,7 +106,7 @@ class top_block(gr.top_block):
         self.socket = socket
         self.build_signal()
         self.gr_vector_source_x_0 = None
-        self.gr_vector_source_x_0 = gr.vector_source_c(self.signal, False, 1)
+        self.gr_vector_source_x_0 = blocks.vector_source_c(self.signal, False, 1)
         self.after_reconfiguration()
 
     def set_gain(self, gain):
@@ -119,6 +121,7 @@ class top_block(gr.top_block):
 
     def init_device(self):
         if self.dev_type == "UHD":
+            print self.dev_addr
             self.device = uhd.usrp_sink(
                 device_addr=self.dev_addr,
                 stream_args=uhd.stream_args(
@@ -126,7 +129,7 @@ class top_block(gr.top_block):
                     channels=range(1),
                 ),
             )
-            self.device.set_samp_rate(samp_rate)
+            self.device.set_samp_rate(self.samp_rate)
             self.device.set_center_freq(433.97e6, 0)
             self.device.set_gain(self.gain, 0)
             self.device.set_antenna('TX/RX', 0)
