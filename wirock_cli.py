@@ -21,4 +21,7 @@ if __name__ == '__main__':
         help="Set gain [default=%default]")
     (options, args) = parser.parse_args()
     tb = top_block(dev_type=options.devtype, dev_addr=options.usrp_addr, dip_conf=options.dip_conf, socket=options.addr, func=options.func)
+    tb.pre_reconfiguration()
+    tb.init_device()
+    tb.after_reconfiguration()
     tb.run()

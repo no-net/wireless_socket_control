@@ -27,7 +27,8 @@ class top_block(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.init_device()
+        #self.init_device()
+        self.device = None
 
         self.build_signal()
 
@@ -39,7 +40,7 @@ class top_block(gr.top_block):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.gr_freq_xlating_fir_filter_xxx_0, 0), (self.device, 0))
+        #self.connect((self.gr_freq_xlating_fir_filter_xxx_0, 0), (self.device, 0))
         self.connect((self.gr_vector_source_x_0, 0), (self.gr_repeat_0, 0))
         self.connect((self.gr_repeat_0, 0), (self.gr_freq_xlating_fir_filter_xxx_0, 0))
 
@@ -75,7 +76,8 @@ class top_block(gr.top_block):
 
     def pre_reconfiguration(self):
         self.lock()
-        self.disconnect((self.gr_freq_xlating_fir_filter_xxx_0, 0), (self.device, 0))
+        if self.device is not None:
+            self.disconnect((self.gr_freq_xlating_fir_filter_xxx_0, 0), (self.device, 0))
         self.disconnect((self.gr_vector_source_x_0, 0), (self.gr_repeat_0, 0))
         self.disconnect((self.gr_repeat_0, 0), (self.gr_freq_xlating_fir_filter_xxx_0, 0))
 
